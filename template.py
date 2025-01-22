@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
 import logging
+from typing import List, Union
 
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s]: %(message)s:')
 
 
@@ -31,21 +33,53 @@ list_of_files = [
 ]
 
 
-for filepath in list_of_files:
-   filepath = Path(filepath)
-   filedir, filename = os.path.split(filepath)
+def create_directory_and_files(list_of_files: List[Union[str, Path]]) -> None:
+    """
+    Creates directories and empty files if they don't exist for given file paths.
+    
+    This function performs the following operations:
+    1. Creates necessary directories for each file path if they don't exist
+    2. Creates empty files if they don't exist or are empty
+    3. Logs the creation of directories and files
+    
+    Args:
+        list_of_files (List[Union[str, Path]]): List of file paths as strings or Path objects
+        
+    Returns:
+        None
+    """
+    try:
+        for filepath in list_of_files:
+            # Convert to Path object if string
+            filepath = Path(filepath)
+            filedir, filename = os.path.split(filepath)
 
-   if filedir !="":
-      os.makedirs(filedir, exist_ok=True)
-      logging.info(f"Creating directory; {filedir} for the file {filename}")
+            # Create directory if it doesn't exist and isn't empty
+            if filedir != "":
+                os.makedirs(filedir, exist_ok=True)
+                logging.info(f"Creating directory: {filedir} for the file {filename}")
 
-   if (not os.path.exists(filepath)) or (os.path.getsize(filepath) == 0):
-      with open(filepath, 'w') as f:
-         pass
-         logging.info(f"Creating empty file: {filepath}")
+            # Create empty file if it doesn't exist or is empty
+            if not os.path.exists(filepath) or os.path.getsize(filepath) == 0:
+                with open(filepath, 'w') as f:
+                    pass
+                logging.info(f"Creating empty file: {filepath}")
+            else:
+                logging.info(f"{filename} is already created")
+                
+    except TypeError as e:
+        logging.error(f"Invalid input type: {e}")
+        raise
+    except OSError as e:
+        logging.error(f"Error creating directory or file: {e}")
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise
 
-   else:
-      logging.info(f"{filename} is already created")
+if __name__ == "__main__":
+    # Run the function
+    create_directory_and_files(list_of_files)
       
       
     
