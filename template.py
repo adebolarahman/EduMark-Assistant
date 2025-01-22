@@ -3,7 +3,6 @@ from pathlib import Path
 import logging
 from typing import List, Union
 
-# Configure logging
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s]: %(message)s:')
 
 
@@ -36,16 +35,16 @@ list_of_files = [
 def create_directory_and_files(list_of_files: List[Union[str, Path]]) -> None:
     try:
         for filepath in list_of_files:
-            # Convert to Path object if string
+            #Convert to Path object if string
             filepath = Path(filepath)
             filedir, filename = os.path.split(filepath)
 
-            # Create directory if it doesn't exist and isn't empty
+            #Create directory if it doesn't exist and isn't empty
             if filedir != "":
                 os.makedirs(filedir, exist_ok=True)
                 logging.info(f"Creating directory: {filedir} for the file {filename}")
 
-            # Create empty file if it doesn't exist or is empty
+            #Create empty file if it doesn't exist or empty
             if not os.path.exists(filepath) or os.path.getsize(filepath) == 0:
                 with open(filepath, 'w') as f:
                     pass
