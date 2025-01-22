@@ -78,7 +78,6 @@ def create_directory_and_files(list_of_files: List[Union[str, Path]]) -> None:
         raise
 
 if __name__ == "__main__":
-    # Run the function
     create_directory_and_files(list_of_files)
       
       
