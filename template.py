@@ -34,20 +34,6 @@ list_of_files = [
 
 
 def create_directory_and_files(list_of_files: List[Union[str, Path]]) -> None:
-    """
-    Creates directories and empty files if they don't exist for given file paths.
-    
-    This function performs the following operations:
-    1. Creates necessary directories for each file path if they don't exist
-    2. Creates empty files if they don't exist or are empty
-    3. Logs the creation of directories and files
-    
-    Args:
-        list_of_files (List[Union[str, Path]]): List of file paths as strings or Path objects
-        
-    Returns:
-        None
-    """
     try:
         for filepath in list_of_files:
             # Convert to Path object if string
