@@ -1,0 +1,10 @@
+#swarm-ai
+openai
+pdfminer.six
+python-dotenv
+rich
+streamlit
+streamlit-extras
+streamlit-option-menu
+phidata
+groq
