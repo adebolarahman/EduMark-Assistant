@@ -15,7 +15,7 @@ list_of_files = [
     "agents/orchestrator.py",
     "agents/profile_enhancer_agent.py",
     "agents/recommender_agent.py",
-    "agents/screener_agent.py",
+    "agents/marker_agent.py",
     "data/__init__.py",
     "data/grade_database.py",
     "db/__init__.py",
