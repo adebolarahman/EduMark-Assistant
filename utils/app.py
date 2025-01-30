@@ -176,20 +176,23 @@ def main():
                         # Save results
                         output_dir = Path("results")
                         if not output_dir.exists():  # Check if directory exists
-                            output_dir.mkdir(parents=True, exist_ok=True)  # Create if it doesn't exist
+                            try:
+                                output_dir.mkdir(parents=True, exist_ok=True)
+                                print(f"✅ Created directory: {output_dir}")  # Debugging log
+                            except Exception as e:
+                                print(f"❌ Error creating results directory: {e}")  # Debugging log
+                                st.error(f"Error creating results directory: {str(e)}")
+                            #output_dir.mkdir(parents=True, exist_ok=True)  # Create if it doesn't exist
                         output_file = output_dir / f"analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-                        with open(output_file, "w") as f:
-                            f.write(str(result))
-                        st.success(f"Results saved to: {output_file}")
-
-                    else:
-                        st.error(
-                            f"Process failed at stage: {result.get('current_stage', 'Unknown stage')}.\n"
-                            f"Error: {result.get('details', 'No details provided.')}"
-                        )
-
-                except Exception as e:
-                    st.error(f"Error processing submission: {str(e)}")
+                        # Try saving the result
+                        try:
+                            with open(output_file, "w") as f:
+                                f.write(str(result))  # Make sure 'result' is a string
+                            st.success(f"Results saved to: {output_file}")
+                            print(f"✅ Successfully saved results to: {output_file}")  # Debugging log
+                        except Exception as e:
+                            print(f"❌ Error saving results: {e}")  # Debugging log
+                            st.error(f"Error saving results: {str(e)}")
 
                 finally:
                     # Cleanup uploaded file
