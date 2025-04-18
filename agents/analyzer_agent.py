@@ -7,8 +7,12 @@ class EduMarkAgent(BaseAgent):
         super().__init__(
             name="EduMark",
             instructions="""Analyze student results and provide:
-            1. Total score
-            2. Grading (A/B/C/D/F)
+            1. Total score (0-100)
+            2. Grading (A/B/C/F) where:
+               - F: Less than 50
+               - C: 50-59
+               - B: 60-69
+               - A: 70-100
             3. Recommendations for improvement
             4. Highlighted strengths
 
@@ -26,10 +30,19 @@ class EduMarkAgent(BaseAgent):
         Analyze these student results and return a JSON object with the following structure:
         {{
             "total_score": number,
-            "grade": "A/B/C/D/F",
+            "grade": "grade letter",
             "recommendations": ["improvement1", "improvement2"],
             "strengths": ["strength1", "strength2"]
         }}
+
+        The grading scale must be exactly as follows:
+        - A: 70-100 points
+        - B: 60-69 points
+        - C: 50-59 points
+        - F: Below 50 points
+
+        Be critical in your assessment and provide a fair score based on the quality of the work.
+        Evaluate the content quality, depth, organization, and completeness.
 
         Student results:
         {uploaded_results["structured_data"]}
@@ -48,6 +61,10 @@ class EduMarkAgent(BaseAgent):
                 "recommendations": ["Improve understanding of core concepts", "Practice problem-solving"],
                 "strengths": ["Consistency in effort"],
             }
+        else:
+            # Ensure grade follows our scale
+            score = parsed_results["total_score"]
+            parsed_results["grade"] = self._calculate_grade(score)
 
         # Dynamically generate timestamp and confidence score
         from datetime import datetime
@@ -61,3 +78,14 @@ class EduMarkAgent(BaseAgent):
             "analysis_timestamp": current_timestamp,
             "confidence_score": round(confidence_score, 2),
         }
+        
+    def _calculate_grade(self, score: int) -> str:
+        """Calculate the grade based on the score."""
+        if score >= 70:
+            return "A"
+        elif score >= 60:
+            return "B"
+        elif score >= 50:
+            return "C"
+        else:
+            return "F"
